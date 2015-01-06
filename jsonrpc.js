@@ -1,11 +1,11 @@
 if(typeof ODOORPC != 'object') {
-    ODOORPC = {};
+    ODOORPC = {
+        requestCounts : 0,
+        session_id : ""
+    };
 }
 
-
 (function() {
-
-    ODOORPC.requestCounts = 0;
 
     ODOORPC.sendRequest = function(url, params) {
         ODOORPC.requestCounts += 1;
