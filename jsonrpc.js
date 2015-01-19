@@ -8,6 +8,8 @@ if(typeof ODOORPC != 'object') {
 (function() {
 
     ODOORPC.sendRequest = function(url, params) {
+        var deferred = $.Deferred();
+
         ODOORPC.requestCounts += 1;
         var json_data = {
             jsonrpc: '2.0',
@@ -21,8 +23,13 @@ if(typeof ODOORPC != 'object') {
             'contentType' : 'application/json',
             'id' : 'r' + ODOORPC.requestCounts
         };
-        return $.ajax(request);
-    };
+        $.ajax(request)
+            .done(function(response) {
+                  console.log('success rpc call', response.result);
+                  deferred.resolve(response.result);
+        })
+        return deferred.promise();
+   };
 
     ODOORPC.login = function(db, login, password) {
         var params = {
@@ -47,8 +54,10 @@ if(typeof ODOORPC != 'object') {
             model: model,
             method: method,
             args: args,
-            kwargs: kwargs
+            kwargs: kwargs,
         };
         return ODOORPC.sendRequest('/web/dataset/call_kw', params);
+
+
     }
 }());
